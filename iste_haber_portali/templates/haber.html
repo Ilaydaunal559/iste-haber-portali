@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block baslik %}{{ h['baslik'] }}{% endblock %}
+{% block haber_id %}{{ h['id'] }}{% endblock %}
+
+{% block icerik %}
+<div class="detay">
+
+  <article class="metin">
+    <a class="geri" href="{{ url_for('anasayfa') }}">Haberlere dön</a>
+
+    {% if h['tarih_kaynak'] == 'demo' %}
+      <p class="etiket-ornek">Örnek veri: gerçek bir duyuru değildir.</p>
+    {% endif %}
+
+    <h1 data-aoi="baslik">{{ h['baslik'] }}</h1>
+    <p class="yayin">Yayın: {{ h['tarih'] }}</p>
+
+    <div class="govde" data-aoi="icerik">
+      {% for p in paragraflar %}<p>{{ p }}</p>{% endfor %}
+      {% if not paragraflar %}<p>Bu haberin metni çekilemedi. Resmi sayfadan okuyabilirsin.</p>{% endif %}
+    </div>
+  </article>
+
+  {% if h['son_tarih'] %}
+  <aside class="yan">
+    {% if varyant == 'kitlik' %}
+      <!-- KITLIK varyantı: canlı geri sayım. JavaScript her saniye .sayac içeriğini günceller -->
+      <div class="geri-sayim" data-aoi="geri-sayim" data-bitis="{{ h['son_tarih'] }}+03:00">
+        <p class="sayac-etiket">Başvurunun bitmesine</p>
+        <div class="sayac" aria-live="off"></div>
+        <p class="sayac-not">
+          Son gün: {{ h['son_tarih'] | tr_tarih }}
+          {% if h['tarih_kaynak'] == 'otomatik' %}<br>Tarih haber metninden otomatik bulundu; resmi duyuruyu kontrol et.{% endif %}
+        </p>
+      </div>
+    {% else %}
+      <!-- KONTROL varyantı: aynı bilgi, aciliyet vurgusu yok -->
+      <div class="tarih-sade" data-aoi="tarih-bilgisi">
+        <p>Son başvuru tarihi: <strong>{{ h['son_tarih'] | tr_tarih }}</strong></p>
+      </div>
+    {% endif %}
+
+    <a class="buton" data-aoi="basvuru-butonu" data-haber-id="{{ h['id'] }}"
+       {% if h['url'] and h['url'].startswith('http') %}href="{{ h['url'] }}" target="_blank" rel="noopener"
+       {% else %}href="#" aria-disabled="true"{% endif %}>
+      Resmi duyuruya git
+    </a>
+  </aside>
+  {% endif %}
+
+</div>
+{% endblock %}

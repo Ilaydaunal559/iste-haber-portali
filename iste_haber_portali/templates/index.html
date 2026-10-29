@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block icerik %}
+
+{% if panoda %}
+<section class="pano" data-aoi="pano" aria-labelledby="pano-baslik">
+  <h2 id="pano-baslik">Başvurusu açık olanlar</h2>
+  <ul class="pano-satirlar">
+    {% for h in panoda %}
+    <li data-aoi="kart" data-haber-id="{{ h['id'] }}">
+      <a class="pano-baslik" href="{{ url_for('haber_detay', haber_id=h['id']) }}">{{ h['baslik'] }}</a>
+      {% if varyant == 'kitlik' %}
+        <span class="rozet-kalan" data-bitis="{{ h['son_tarih'] }}+03:00"></span>
+      {% else %}
+        <span class="rozet-sade">Son başvuru: {{ h['son_tarih'] | tr_tarih }}</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+<section class="liste">
+  <h2>Tüm haberler</h2>
+  {% if not panoda and not digerleri %}
+    <p class="bos">Henüz haber yok. Terminalde <code>python demo_veri.py</code> veya
+       <code>python iste_news.py</code> çalıştır.</p>
+  {% endif %}
+  {% for h in digerleri %}
+  <article class="satir" data-aoi="kart" data-haber-id="{{ h['id'] }}">
+    <a href="{{ url_for('haber_detay', haber_id=h['id']) }}">{{ h['baslik'] }}</a>
+    <span class="tarih">
+      {% if h['kategori'] %}{{ h['kategori'] | capitalize }}, {% endif %}{% if h['son_tarih'] %}başvuru süresi doldu{% else %}{{ h['tarih'] }}{% endif %}
+    </span>
+  </article>
+  {% endfor %}
+</section>
+
+{% endblock %}

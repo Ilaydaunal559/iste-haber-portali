@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block baslik %}İSTE Haberleri{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body data-haber-id="{% block haber_id %}{% endblock %}" data-varyant="{{ varyant }}">
+
+  <header class="ust">
+    <a class="marka" href="{{ url_for('anasayfa') }}">İSTE Haberleri</a>
+    <nav>
+      <a href="{{ url_for('anasayfa') }}">Haberler</a>
+      <a href="{{ url_for('rapor') }}">Bakış raporu</a>
+    </nav>
+  </header>
+
+  <main>
+    {% block icerik %}{% endblock %}
+  </main>
+
+  <!-- Bakış takibi durum paneli: fare ve Gazepoint arasında geçiş, bakış noktasını göster/gizle -->
+  <aside id="gaze-panel" aria-label="Bakış takibi">
+    <span id="gaze-durum" class="nokta"></span>
+    <span id="gaze-mod-yazi">Fare modu</span>
+    <button type="button" id="gaze-mod-degistir">Gazepoint'e geç</button>
+    <button type="button" id="gaze-nokta-ac" aria-pressed="false">Noktayı göster</button>
+  </aside>
+  <div id="gaze-nokta" hidden></div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

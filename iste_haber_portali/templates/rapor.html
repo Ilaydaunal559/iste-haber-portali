@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block baslik %}Bakış raporu{% endblock %}
+{% block icerik %}
+<section class="rapor">
+  <h1>Bakış raporu</h1>
+  <p class="aciklama">
+    Ziyaretçiler rastgele iki gruba ayrılır: <strong>kıtlık</strong> (geri sayım var) ve
+    <strong>kontrol</strong> (aynı tarih sade metin). Aşağıda her grubun bölgelere harcadığı toplam bakış süresi
+    ve başvuru butonuna tıklama sayısı yer alır. Örneklem küçükken sonuçlar rastlantı olabilir.
+  </p>
+
+  <h2>Gruplara göre özet</h2>
+  <table>
+    <thead><tr><th>Grup</th><th>Kişi</th><th>Başvuru tıklaması</th></tr></thead>
+    <tbody>
+      {% for o in ozet %}
+      <tr><td>{{ o['varyant'] }}</td><td>{{ o['kisi'] }}</td><td>{{ o['tiklama'] }}</td></tr>
+      {% else %}
+      <tr><td colspan="3">Henüz veri yok. Bir haber sayfasını açıp biraz gezin.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Bölgelere göre bakış süresi</h2>
+  <table>
+    <thead><tr><th>Grup</th><th>Bölge</th><th>Toplam süre (sn)</th><th>Kişi</th></tr></thead>
+    <tbody>
+      {% for b in bolgeler %}
+      <tr><td>{{ b['varyant'] }}</td><td>{{ b['aoi'] }}</td>
+          <td>{{ '%.1f' | format(b['saniye']) }}</td><td>{{ b['kisi'] }}</td></tr>
+      {% else %}
+      <tr><td colspan="4">Henüz bakış verisi yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
